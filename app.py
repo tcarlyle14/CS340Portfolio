@@ -52,6 +52,30 @@ def delete_agent():
     db.execute_query(db_connection=db_connection, query=query, query_params=(agent_id,))
     return redirect("/agents")
 
+@app.route('/update_agent/<int:agent_id>', methods=['GET', 'POST'])
+def update_agent(agent_id):
+    if request.method == 'GET':
+        # Fetch the current data for the agent
+        query = "SELECT * FROM Agents WHERE AgentID = %s;"
+        cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(agent_id,))
+        agent = cursor.fetchone()
+        return render_template("edit_agent.j2", agent=agent)
+    
+    if request.method == 'POST':
+        # Update the agent with the new data
+        name = request.form['name']
+        phone = request.form['phone']
+        territory = request.form['territory']
+        hire_date = request.form['hireDate']
+        query = """
+        UPDATE Agents
+        SET Name = %s, Phone = %s, Territory = %s, HireDate = %s
+        WHERE AgentID = %s;
+        """
+        data = (name, phone, territory, hire_date, agent_id)
+        db.execute_query(db_connection=db_connection, query=query, query_params=data)
+        return redirect("/agents")
+
 # Listener
 
 if __name__ == "__main__":

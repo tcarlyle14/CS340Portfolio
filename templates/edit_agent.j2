@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit Agent</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <h1>Edit Agent</h1>
+    <form method="POST">
+        <fieldset>
+            <legend><strong>Update Agent</strong></legend>
+            <input type="hidden" name="agentID" value="{{ agent['AgentID'] }}">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" value="{{ agent['Name'] }}" required>
+            <label for="phone">Phone</label>
+            <input type="text" name="phone" id="phone" value="{{ agent['Phone'] }}" required>
+            <label for="territory">Territory</label>
+            <select name="territory" id="territory" required>
+                <option value="North" {% if agent['Territory'] == 'North' %}selected{% endif %}>North</option>
+                <option value="South" {% if agent['Territory'] == 'South' %}selected{% endif %}>South</option>
+                <option value="East" {% if agent['Territory'] == 'East' %}selected{% endif %}>East</option>
+            </select>
+            <label for="hireDate">Hire Date</label>
+            <input type="date" name="hireDate" id="hireDate" value="{{ agent['HireDate'] }}" required>
+        </fieldset>
+        <input class="btn" type="submit" value="Update Agent">
+        <a class="btn" href="{{ url_for('agents') }}">Cancel</a>
+    </form>
+</body>
+</html>

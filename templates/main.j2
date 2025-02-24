@@ -1,27 +1,16 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>OSU - CS 340 - Introduction to Databases - Flask Demo Project</title>
+    <title>Oregon Real Estate Sales Management System</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <h1>CS 340 - Introduction to Databases</h1>
-    <p>This is a demonstration project created to show students how to create a Flask app and connect it to a MySQL database.</p>
+    <h1>Oregon Real Estate Sales Management System</h1>
+    <p>Welcome to the Oregon Real Estate Sales Management System. Use the links below to navigate through the system's functionalities. Each page represents a different entity where you can add, edit, or delete instances of each entity.</p>
+    [ <a href="{{ url_for('root') }}">Home</a> | <a href="{{ url_for('agents') }}">Agents</a> | <a href="properties.html">Properties</a> | <a href="sellers.html">Sellers</a> | <a href="transactions.html">Transactions</a> | <a href="agent-property.html">Agent-Property</a> ]
+    <h4>Context</h4>
+    <p>
+        Oregon Real Estate is a brokerage specializing in buying and selling residential real estate properties throughout Oregon. The company employs five agents, each assigned to specific counties, with some overlap to ensure comprehensive market coverage. Because of this, a property can be sold by multiple agents. However, the current system that is used to track properties and sales transactions does not allow for overlapping market assignments and multiple agents assigned to a property. This has caused the existing system to be inefficient for the company’s use case as there is a lot of data redundancy. Therefore, the firm is transitioning to a modern database management system to better track transaction details and improve operational efficiency. During that year, Oregon Real Estate successfully facilitated 54 transactions for 40 sellers, achieving total property sales of $19 million and generating approximately $1 million in revenue. The new system aims to streamline property management, track agent performance, and maintain detailed records of sellers, transactions, and commissions.
+    </p>
 </body>
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Location</th>
-        <th>Favorite Language</th>
-    </tr>
-    <tbody>
-    {% for item in people %}
-    <tr>
-        <td>{{item['name']}}</td>
-        <td>{{item['age']}}</td>
-        <td>{{item['location']}}</td>
-        <td>{{item['favorite_color']}}</td>
-    </tr>
-    {% endfor %}
-</table>
 </html>

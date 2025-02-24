@@ -11,7 +11,6 @@
             });
         }
         function newAgent() { showform('insert'); }
-        function updateAgent(aid) { showform('update'); }
         function deleteAgent(aid, name) {
             console.log("Deleting agent:", aid, name); // Debugging line
             document.getElementById('deleteagentID').value = aid;
@@ -26,7 +25,7 @@
 <body onload="browseAgents()">
     <h1>Agents</h1>
     <h3>Add, edit, or delete an agent from the table</h3>
-    [ <a href="index.html">Home</a> | <a href="agents.html">Agents</a> | <a href="properties.html">Properties</a> | <a href="sellers.html">Sellers</a> | <a href="transactions.html">Transactions</a> | <a href="agent-property.html">Agent-Property</a> ]
+    [ <a href="{{ url_for('root') }}">Home</a> | <a href="{{ url_for('agents') }}">Agents</a> | <a href="properties.html">Properties</a> | <a href="sellers.html">Sellers</a> | <a href="transactions.html">Transactions</a> | <a href="agent-property.html">Agent-Property</a> ]
     <div id="browse">
         <p><a href="#" onclick="showAll()">Display all forms</a></p>
         <p><a href="#" onclick="newAgent()">Add Agent</a></p>
@@ -43,7 +42,7 @@
                 {% for agent in Agents %}
                     <tr>
                         <td>
-                            <a href="#" onclick="updateAgent({{ agent['Agent ID'] }})">Edit</a> |
+                            <a href="{{ url_for('update_agent', agent_id=agent['AgentID']) }}">Edit</a> |
                             <a href="#" onclick="deleteAgent({{ agent['AgentID'] }}, '{{ agent['Name'] }}')">Delete</a>
                         </td>
                         {% for key in agent.keys() %}
@@ -65,9 +64,9 @@
                 <label for="territory">Territory</label>
                 <select name="territory" id="territory">
                     <option value="0">&nbsp;</option>
-                    <option value="1">North</option>
-                    <option value="2">South</option>
-                    <option value="3">East</option>
+                    <option value="North">North</option>
+                    <option value="South">South</option>
+                    <option value="East">East</option>
                 </select>
                 <label for="hireDate">Hire Date</label>
                 <input type="date" name="hireDate" id="hireDate">
