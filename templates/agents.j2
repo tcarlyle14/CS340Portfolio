@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Agents</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script>
+        function showform(dowhat) {
+            const sections = ['browse', 'insert', 'update', 'delete'];
+            sections.forEach(section => {
+                document.getElementById(section).style.display = (dowhat === section || dowhat === 'all') ? 'block' : 'none';
+            });
+        }
+        function newAgent() { showform('insert'); }
+        function updateAgent(aid) { showform('update'); }
+        function deleteAgent(aid, name) {
+            console.log("Deleting agent:", aid, name); // Debugging line
+            document.getElementById('deleteagentID').value = aid;
+            document.getElementById('deleteAgentIDDisplay').textContent = aid;
+            document.getElementById('deleteAgentNameDisplay').textContent = name;
+            showform('delete');
+        }
+        function browseAgents() { showform('browse'); }
+        function showAll() { showform('all'); }
+    </script>
+</head>
+<body onload="browseAgents()">
+    <h1>Agents</h1>
+    <h3>Add, edit, or delete an agent from the table</h3>
+    [ <a href="index.html">Home</a> | <a href="agents.html">Agents</a> | <a href="properties.html">Properties</a> | <a href="sellers.html">Sellers</a> | <a href="transactions.html">Transactions</a> | <a href="agent-property.html">Agent-Property</a> ]
+    <div id="browse">
+        <p><a href="#" onclick="showAll()">Display all forms</a></p>
+        <p><a href="#" onclick="newAgent()">Add Agent</a></p>
+        <table border="1" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>Actions</th>
+                    {% for key in Agents[0].keys() %}
+                        <th>{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for agent in Agents %}
+                    <tr>
+                        <td>
+                            <a href="#" onclick="updateAgent({{ agent['Agent ID'] }})">Edit</a> |
+                            <a href="#" onclick="deleteAgent({{ agent['AgentID'] }}, '{{ agent['Name'] }}')">Delete</a>
+                        </td>
+                        {% for key in agent.keys() %}
+                            <td>{{ agent[key] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> <!-- browse -->
+    <div id="insert" style="display: none;">
+        <form method="POST" id="addAgent">
+            <fieldset>
+                <legend><strong>Add Agent</strong></legend>
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name">
+                <label for="phone">Phone</label>
+                <input type="text" name="phone" id="phone">
+                <label for="territory">Territory</label>
+                <select name="territory" id="territory">
+                    <option value="0">&nbsp;</option>
+                    <option value="1">North</option>
+                    <option value="2">South</option>
+                    <option value="3">East</option>
+                </select>
+                <label for="hireDate">Hire Date</label>
+                <input type="date" name="hireDate" id="hireDate">
+            </fieldset>
+            <input class="btn" type="submit" value="Add Agent">
+            <input class="btn" type="button" value="Cancel" onclick="browseAgents()">
+        </form>
+    </div> <!-- insert -->
+    <div id="update" style="display: none;">
+        <form method="POST" id="UpdateAgent">
+            <fieldset>
+                <legend><strong>Update Agent</strong></legend>
+                <input type="hidden" name="agentID" id="updateagentID">
+                <label>Agent ID:</label> <span id="updateAgentIDDisplay"></span>
+                <label for="updateName">Name</label>
+                <input type="text" name="name" id="updateName">
+                <label for="updatePhone">Phone</label>
+                <input type="text" name="phone" id="updatePhone">
+                <label for="updateTerritory">Territory</label>
+                <select name="territory" id="updateTerritory">
+                    <option value="0">&nbsp;</option>
+                    <option value="1">North</option>
+                    <option value="2">South</option>
+                    <option value="3">East</option>
+                </select>
+                <label for="updateHireDate">Hire Date</label>
+                <input type="date" name="hireDate" id="updateHireDate">
+            </fieldset>
+            <input class="btn" type="submit" value="Update Agent">
+            <input class="btn" type="button" value="Cancel" onclick="browseAgents()">
+        </form>
+    </div> <!-- update -->
+    <div id="delete" style="display: none;">
+        <form method="POST" action="/delete_agent" id="deleteAgent">
+            <fieldset>
+                <legend><strong>Delete Agent</strong></legend>
+                <p>Are you sure you wish to delete the following?</p>
+                <input type="hidden" name="agentID" id="deleteagentID">
+                <label><strong>Agent ID:</strong></label> <span id="deleteAgentIDDisplay"></span>
+                <label><strong>Name:</strong></label> <span id="deleteAgentNameDisplay"></span>
+            </fieldset>
+            <input class="btn" type="submit" value="Delete Agent">
+            <input class="btn" type="button" value="Cancel" onclick="browseAgents()">
+        </form>
+    </div>
+</body>
+</html>
