@@ -76,6 +76,50 @@ def update_agent(agent_id):
         db.execute_query(db_connection=db_connection, query=query, query_params=data)
         return redirect("/agents")
 
+# For reading/displaying the M:M relationship
+@app.route('/agent_listings')
+def agent_listings():
+    query = """
+    SELECT j.JunctionID as ID, a.Name as AgentName, p.Address as ListingAddress 
+    FROM AgentPropertyJunction j
+    JOIN Agents a ON j.AgentID = a.AgentID
+    JOIN Properties p ON j.PropertyID = p.PropertyID;
+    """
+    cursor = db.execute_query(db_connection=db_connection, query=query)
+    results = cursor.fetchall()
+    
+    # Also get all agents and properties for dropdowns
+    agents_query = "SELECT AgentID, Name FROM Agents;"
+    agents_cursor = db.execute_query(db_connection=db_connection, query=agents_query)
+    agents = agents_cursor.fetchall()
+    
+    properties_query = "SELECT PropertyID, Address FROM Properties;"
+    properties_cursor = db.execute_query(db_connection=db_connection, query=properties_query)
+    properties = properties_cursor.fetchall()
+    
+    return render_template("agent_listings.j2", assignments=results, agents=agents, listings=properties)
+
+# For creating a new assignment
+@app.route('/add_agent_listing', methods=['POST'])
+def add_agent_listing():
+    agent_id = request.form['agentID']  # From a dropdown
+    property_id = request.form['propertyID']  # From a dropdown
+    
+    query = "INSERT INTO AgentPropertyJunction (AgentID, PropertyID) VALUES (%s, %s);"
+    db.execute_query(db_connection=db_connection, query=query, query_params=(agent_id, property_id))
+    
+    return redirect('/agent_listings')
+
+# For deleting an assignment
+@app.route('/delete_agent_listing', methods=['POST'])
+def delete_agent_listing():
+    junction_id = request.form['assignmentID']
+    
+    query = "DELETE FROM AgentPropertyJunction WHERE JunctionID = %s;"
+    db.execute_query(db_connection=db_connection, query=query, query_params=(junction_id,))
+    
+    return redirect('/agent_listings')
+
 # Listener
 
 if __name__ == "__main__":
